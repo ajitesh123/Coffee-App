@@ -48,7 +48,15 @@ class Drink(db.Model):
     '''
     def short(self):
         print(json.loads(self.recipe))
-        short_recipe = [{'color': r['color'], 'parts': r['parts']} for r in json.loads(self.recipe)]
+        new_dict = {}
+        for key in json.loads(self.recipe):
+            if key == 'color':
+                new_dict['color'] = json.loads(self.recipe)[key]
+            elif key == 'parts':
+                new_dict['parts'] = json.loads(self.recipe)[key]
+
+        short_recipe = [new_dict]
+
         return {
             'id': self.id,
             'title': self.title,
