@@ -11,7 +11,7 @@ app = Flask(__name__)
 setup_db(app)
 CORS(app)
 
-#db_drop_and_create_all()
+db_drop_and_create_all()
 
 # ------------------------------------------------------------
 #  Controllers
@@ -91,12 +91,14 @@ def change_detail(jwt, drink_id):
             return abort(404)
 
         body = request.get_json()
-        new_title = body['title']
-        recipe_json = body['recipe']
-        recipe = json.dumps(recipe_json)
 
-        drink.title = new_title
-        drink.recipe = recipe
+        if 'title' in body:
+            drink.title = body['title']
+
+        if 'recipe' in body:
+            drink.recipe = json.dumps(body['recipe'])
+
+        drink.update()
 
         return jsonify({
             'success': True,
